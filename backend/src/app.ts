@@ -3,10 +3,12 @@ import cors from "cors";
 import helmet from "helmet";
 import { notFoundHandler } from "./middleware/notFoundHandler.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { clerkMiddleware } from "@clerk/express";
 
 export function createApp() {
   const app = express();
   app.use(helmet());
+  app.use(clerkMiddleware());
   app.use(
     cors({
       origin: ["http://localhost:3000"],

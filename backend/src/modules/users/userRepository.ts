@@ -27,3 +27,27 @@ export async function upsertUserFromClerkProfile(params: {
 
   return user;
 }
+
+export async function repoUpdateUserProfile(params: {
+  clerkUserId: string;
+  displayName?: string;
+  handle?: string;
+  bio?: string;
+  avatarUrl?: string;
+}): Promise<User> {
+  const { clerkUserId, displayName, handle, bio, avatarUrl } = params;
+
+  const user = await prisma.user.update({
+    where: {
+      clerkUserId,
+    },
+    data: {
+      ...(displayName !== undefined && { displayName }),
+      ...(handle !== undefined && { handle }),
+      ...(bio !== undefined && { bio }),
+      ...(avatarUrl !== undefined && { avatarUrl }),
+    },
+  });
+
+  return user;
+}

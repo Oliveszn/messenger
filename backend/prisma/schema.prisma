@@ -19,5 +19,65 @@ model User {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+   threads      Thread[]
+   replies       Reply[]        @relation("UserReplies")
+  threadReacts  ThreadReaction[] @relation("UserReactions")
+
   @@map("users")
+}
+
+model Category {
+  id          BigInt   @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  description String?
+
+  threads     Thread[]
+
+  @@map("categories")
+}
+
+model Thread {
+  id            BigInt   @id @default(autoincrement())
+
+  categoryId    BigInt
+  authorUserId  String
+
+  title         String
+  body          String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  category      Category @relation(fields: [categoryId], references: [id])
+  author        User     @relation(fields: [authorUserId], references: [id])
+  replies       Reply[]  @relation("ThreadReplies")
+  reactions     ThreadReaction[] @relation("ThreadReactions")
+
+  @@index([categoryId, createdAt(sort: Desc)])
+  @@map("threads")
+}
+
+model Reply {
+  id            BigInt   @id @default(autoincrement())
+  threadId      BigInt
+  authorUserId  String
+  body          String
+  createdAt     DateTime @default(now())
+
+  thread        Thread   @relation("ThreadReplies", fields: [threadId], references: [id])
+  author        User     @relation("UserReplies", fields: [authorUserId], references: [id])
+
+  @@map("replies")
+}
+
+model ThreadReaction {
+  threadId  BigInt
+  userId    String
+
+ thread    Thread @relation("ThreadReactions", fields: [threadId], references: [id])
+  user      User   @relation("UserReactions", fields: [userId], references: [id])
+
+  @@id([threadId, userId])
+  @@map("thread_reactions")
 }

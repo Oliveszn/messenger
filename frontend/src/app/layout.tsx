@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/common/Navbar";
+import { Toaster } from "sonner";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,12 +28,20 @@ export default function RootLayout({
     <ClerkProvider
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
     >
-      <html lang="en">
+      <html lang="en" className="dark">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           suppressHydrationWarning={true}
         >
-          {children}
+          <div className="flex min-h-screen flex-col bg-background text-foreground">
+            <Navbar />
+            <main className="flex flex-1 flex-col">
+              <div className="mx-auto flex w-full max-w-6xl  flex-1 flex-col px-4 py-8 md:py-10">
+                {children}
+              </div>
+            </main>
+          </div>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

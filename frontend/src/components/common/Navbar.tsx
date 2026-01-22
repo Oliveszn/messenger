@@ -5,17 +5,20 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Bell, Menu, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
+// import { useSocket } from "@/hooks/use-socket";
 import { apiGet, createBrowserApiClient } from "@/lib/api-client";
-
+// import { Notification } from "@/types/notification";
+// import { useNotificationCount } from "@/hooks/use-notification-count";
 import { toast } from "sonner";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { getToken, userId } = useAuth();
-
+  //   const { socket } = useSocket();
   const [unreadCount, setUnreadCount] = useState(0);
+  //   const { unreadCount, setUnreadCount, incrementUnread } =
+  //     useNotificationCount();
 
   const apiClient = useMemo(() => createBrowserApiClient(getToken), [getToken]);
 
@@ -46,6 +49,29 @@ export default function Navbar() {
 
     loadUnreadNotifications();
   }, [userId]);
+
+  //   useEffect(() => {
+  //     if (!socket) {
+  //       return;
+  //     }
+
+  //     const handleNewNotification = (payload: Notification) => {
+  //       incrementUnread();
+
+  //       toast("New Notification", {
+  //         description:
+  //           payload.type === "REPLY_ON_THREAD"
+  //             ? `${payload.actor.handle ?? "Someone"} commented to your thread`
+  //             : `${payload.actor.handle ?? "Someone"} liked your thread`,
+  //       });
+  //     };
+
+  //     socket.on("notification:new", handleNewNotification);
+
+  //     return () => {
+  //       socket.off("notification:new", handleNewNotification);
+  //     };
+  //   }, [socket, incrementUnread]);
 
   const navItems = [
     {
@@ -81,9 +107,8 @@ export default function Navbar() {
             className="flex items-center gap-2 font-bold text-lg text-sidebar-foreground"
           >
             <span className="bg-linear-to-r from-primary to-chart-2 bg-clip-text text-transparent">
-              Ace
+              Messenger
             </span>
-            <span className="text-foreground/90">Forum</span>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navItems.map(renderNavLinks)}

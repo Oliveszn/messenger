@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-8">Welcome to Chat App</h1>
+    <div className="flex w-full flex-1 flex-col">
+      {/* <h1 className="text-4xl font-bold mb-8">Welcome to Chat App</h1>
       <div className="space-x-4">
         <Link
           href="/sign-in"
@@ -17,7 +17,7 @@ export default function Home() {
         >
           Sign Up
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }

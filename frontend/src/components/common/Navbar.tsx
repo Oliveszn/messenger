@@ -5,73 +5,73 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { Bell, Menu, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-// import { useSocket } from "@/hooks/use-socket";
+import { useSocket } from "@/hooks/useSocket";
 import { apiGet, createBrowserApiClient } from "@/lib/api-client";
-// import { Notification } from "@/types/notification";
-// import { useNotificationCount } from "@/hooks/use-notification-count";
+import { Notification } from "@/types/NotificationTypes";
+import { useNotificationCount } from "@/hooks/useNotification";
 import { toast } from "sonner";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const { getToken, userId } = useAuth();
-  //   const { socket } = useSocket();
-  const [unreadCount, setUnreadCount] = useState(0);
-  //   const { unreadCount, setUnreadCount, incrementUnread } =
-  //     useNotificationCount();
+  const { socket } = useSocket();
+  // const [unreadCount, setUnreadCount] = useState(0);
+  const { unreadCount, setUnreadCount, incrementUnread } =
+    useNotificationCount();
 
   const apiClient = useMemo(() => createBrowserApiClient(getToken), [getToken]);
 
-  // useEffect(() => {
-  //   let isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-  //   async function loadUnreadNotifications() {
-  //     if (!userId) {
-  //       if (isMounted) setUnreadCount(0);
-  //       return;
-  //     }
+    async function loadUnreadNotifications() {
+      if (!userId) {
+        if (isMounted) setUnreadCount(0);
+        return;
+      }
 
-  //     try {
-  //       const data = await apiGet<Notification[]>(
-  //         apiClient,
-  //         "/api/notifications?unreadOnly=true",
-  //       );
+      try {
+        const data = await apiGet<Notification[]>(
+          apiClient,
+          "/api/notifications?unreadOnly=true",
+        );
 
-  //       if (!isMounted) return;
-  //       console.log(data);
+        if (!isMounted) return;
+        console.log(data);
 
-  //       setUnreadCount(data.length);
-  //     } catch (e) {
-  //       if (!isMounted) return;
-  //       console.log(`Error ocuured`);
-  //     }
-  //   }
+        setUnreadCount(data.length);
+      } catch (e) {
+        if (!isMounted) return;
+        console.log(`Error ocuured`);
+      }
+    }
 
-  //   loadUnreadNotifications();
-  // }, [userId]);
+    loadUnreadNotifications();
+  }, [userId]);
 
-  //   useEffect(() => {
-  //     if (!socket) {
-  //       return;
-  //     }
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
 
-  //     const handleNewNotification = (payload: Notification) => {
-  //       incrementUnread();
+    const handleNewNotification = (payload: Notification) => {
+      incrementUnread();
 
-  //       toast("New Notification", {
-  //         description:
-  //           payload.type === "REPLY_ON_THREAD"
-  //             ? `${payload.actor.handle ?? "Someone"} commented to your thread`
-  //             : `${payload.actor.handle ?? "Someone"} liked your thread`,
-  //       });
-  //     };
+      toast("New Notification", {
+        description:
+          payload.type === "REPLY_ON_THREAD"
+            ? `${payload.actor.handle ?? "Someone"} commented to your thread`
+            : `${payload.actor.handle ?? "Someone"} liked your thread`,
+      });
+    };
 
-  //     socket.on("notification:new", handleNewNotification);
+    socket.on("notification:new", handleNewNotification);
 
-  //     return () => {
-  //       socket.off("notification:new", handleNewNotification);
-  //     };
-  //   }, [socket, incrementUnread]);
+    return () => {
+      socket.off("notification:new", handleNewNotification);
+    };
+  }, [socket, incrementUnread]);
 
   const navItems = [
     {

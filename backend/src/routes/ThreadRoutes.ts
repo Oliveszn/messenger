@@ -18,6 +18,10 @@ import {
   listRepliesForThread,
   removeThreadOnce,
 } from "../modules/threads/repliesRepository.js";
+import {
+  createLikeNotification,
+  createReplyNotification,
+} from "../modules/notifications/notificationService.js";
 
 export const threadsRouter = Router();
 
@@ -148,6 +152,11 @@ threadsRouter.post("/threads/:threadId/replies", async (req, res, next) => {
       body: bodyRaw,
     });
 
+    await createReplyNotification({
+      threadId,
+      actorUserId: profile.user.id,
+    });
+
     res.status(201).json({ data: reply });
   } catch (err) {
     next(err);
@@ -200,6 +209,10 @@ threadsRouter.post("/threads/:threadId/like", async (req, res, next) => {
       userId: profile.user.id,
     });
 
+    await createLikeNotification({
+      threadId,
+      actorUserId: profile.user.id,
+    });
     res.status(204).send();
   } catch (err) {
     next(err);

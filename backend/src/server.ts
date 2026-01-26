@@ -3,6 +3,7 @@ import { logger } from "./lib/logger.js";
 import http from "node:http";
 import { connectDB } from "./prisma.js";
 import { env } from "./config/env.js";
+import { initIo } from "./realtime/io.js";
 
 async function startServer() {
   try {
@@ -11,6 +12,8 @@ async function startServer() {
     const server = http.createServer(app);
 
     const port = Number(env.PORT) || 5000;
+
+    initIo(server);
 
     server.listen(port, () => {
       logger.info(`Server is now listening to port ${port}`);

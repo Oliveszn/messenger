@@ -27,7 +27,7 @@ model User {
 }
 
 model Category {
-  id          BigInt   @id @default(autoincrement())
+  id          String   @id @default(uuid())
   slug        String   @unique
   name        String
   description String?
@@ -38,9 +38,9 @@ model Category {
 }
 
 model Thread {
-  id            BigInt   @id @default(autoincrement())
+  id            String   @id @default(uuid())
 
-  categoryId    BigInt
+  categoryId    String
   authorUserId  String
 
   title         String
@@ -59,8 +59,8 @@ model Thread {
 }
 
 model Reply {
-  id            BigInt   @id @default(autoincrement())
-  threadId      BigInt
+  id            String   @id @default(uuid())
+  threadId      String
   authorUserId  String
   body          String
   createdAt     DateTime @default(now())
@@ -72,7 +72,7 @@ model Reply {
 }
 
 model ThreadReaction {
-  threadId  BigInt
+  threadId  String
   userId    String
 
  thread    Thread @relation("ThreadReactions", fields: [threadId], references: [id])

@@ -77,7 +77,7 @@ export async function createThread(params: {
   return getThreadById(thread.id);
 }
 
-export async function getThreadById(id: bigint): Promise<ThreadDetail> {
+export async function getThreadById(id: string): Promise<ThreadDetail> {
   const thread = await prisma.thread.findUnique({
     where: { id },
     include: {
@@ -101,7 +101,7 @@ export async function getThreadById(id: bigint): Promise<ThreadDetail> {
   }
 
   return {
-    id: Number(thread.id),
+    id: thread.id as unknown as string,
     title: thread.title,
     body: thread.body,
     createdAt: thread.createdAt,
@@ -161,7 +161,7 @@ export async function listThreads(
   });
 
   return threads.map((t) => ({
-    id: Number(t.id),
+    id: t.id as unknown as string,
     title: t.title,
     excerpt: t.body.slice(0, 200),
     createdAt: t.createdAt,

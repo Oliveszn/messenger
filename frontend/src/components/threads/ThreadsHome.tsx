@@ -4,8 +4,7 @@ import { apiGet, createBrowserApiClient } from "@/lib/api-client";
 import { Category, ThreadSummary } from "@/types/Threadtypes";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
@@ -14,7 +13,7 @@ import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
 
 export default function ThreadsHome() {
-  const { getToken } = useAuth();
+  const { getToken, isLoaded } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,6 +29,7 @@ export default function ThreadsHome() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isLoaded) return;
     let isMounted = true;
 
     async function load() {
@@ -63,7 +63,7 @@ export default function ThreadsHome() {
     }
 
     load();
-  }, [apiClient]);
+  }, [apiClient, isLoaded]);
 
   async function applyFilters(
     currentCategoryVal: string,
@@ -84,6 +84,9 @@ export default function ThreadsHome() {
     setIsLoading(true);
 
     try {
+      setIsLoading(true);
+      setError(null);
+
       const threadsListAfterSearchAndFilter = await apiGet<ThreadSummary[]>(
         apiClient,
         "/api/threads/threads",
@@ -101,10 +104,13 @@ export default function ThreadsHome() {
       setThreads(threadsListAfterSearchAndFilter);
     } catch (err) {
       console.log(err);
+      setError("Something went wrong while filtering threads.");
     } finally {
       setIsLoading(false);
     }
   }
+  console.log(categories);
+
   return (
     <div className="flex w-full flex-col gap-6 lg:flex-row">
       <aside className="w-full shrink-0 lg:w-72">

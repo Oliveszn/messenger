@@ -1,12 +1,12 @@
 export type Category = {
-  id: bigint;
+  id: string;
   slug: string;
   name: string;
   description: string | null;
 };
 
 export type ThreadDetail = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   createdAt: Date;
@@ -30,7 +30,7 @@ export type ThreadListFilter = {
 };
 
 export type ThreadSummary = {
-  id: number;
+  id: string;
   title: string;
   excerpt: string;
   createdAt: Date;

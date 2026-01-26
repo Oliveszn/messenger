@@ -63,9 +63,9 @@ threadsRouter.post("/threads", async (req, res, next) => {
 
 threadsRouter.get("/threads/:threadId", async (req, res, next) => {
   try {
-    const threadId = BigInt(req.params.threadId);
+    const threadId = req.params.threadId;
 
-    if (threadId <= 0n) {
+    if (!threadId) {
       throw new BadRequestError("Invalid thread id");
     }
 
@@ -114,7 +114,7 @@ threadsRouter.get("/threads/:threadId/replies", async (req, res, next) => {
       throw new UnauthorizedError("Unauthorized");
     }
 
-    const threadId = BigInt(req.params.threadId);
+    const threadId = req.params.threadId;
     const replies = await listRepliesForThread(threadId);
 
     res.json({ data: replies });
@@ -130,8 +130,8 @@ threadsRouter.post("/threads/:threadId/replies", async (req, res, next) => {
       throw new UnauthorizedError("Unauthorized");
     }
 
-    const threadId = BigInt(req.params.threadId);
-    if (threadId <= 0n) {
+    const threadId = req.params.threadId;
+    if (!threadId) {
       throw new BadRequestError("Invalid thread Id");
     }
 
@@ -161,8 +161,8 @@ threadsRouter.delete("/replies/:replyId", async (req, res, next) => {
       throw new UnauthorizedError("Unauthorized");
     }
 
-    const replyId = BigInt(req.params.replyId);
-    if (!Number.isInteger(replyId) || replyId <= 0) {
+    const replyId = req.params.replyId;
+    if (!replyId) {
       throw new BadRequestError("Invalid replyId");
     }
 
@@ -188,8 +188,8 @@ threadsRouter.post("/threads/:threadId/like", async (req, res, next) => {
       throw new UnauthorizedError("Unauthorized");
     }
 
-    const threadId = BigInt(req.params.threadId);
-    if (threadId <= 0n) {
+    const threadId = req.params.threadId;
+    if (!threadId) {
       throw new BadRequestError("Invalid thread Id");
     }
 
@@ -212,8 +212,8 @@ threadsRouter.delete("/threads/:threadId/like", async (req, res, next) => {
     if (!auth.userId) {
       throw new UnauthorizedError("Unauthorized");
     }
-    const threadId = BigInt(req.params.threadId);
-    if (threadId <= 0n) {
+    const threadId = req.params.threadId;
+    if (!threadId) {
       throw new BadRequestError("Invalid thread Id");
     }
 

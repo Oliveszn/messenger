@@ -22,33 +22,33 @@ export default function Navbar() {
 
   const apiClient = useMemo(() => createBrowserApiClient(getToken), [getToken]);
 
-  useEffect(() => {
-    let isMounted = true;
+  // useEffect(() => {
+  //   let isMounted = true;
 
-    async function loadUnreadNotifications() {
-      if (!userId) {
-        if (isMounted) setUnreadCount(0);
-        return;
-      }
+  //   async function loadUnreadNotifications() {
+  //     if (!userId) {
+  //       if (isMounted) setUnreadCount(0);
+  //       return;
+  //     }
 
-      try {
-        const data = await apiGet<Notification[]>(
-          apiClient,
-          "/api/notifications?unreadOnly=true",
-        );
+  //     try {
+  //       const data = await apiGet<Notification[]>(
+  //         apiClient,
+  //         "/api/notifications?unreadOnly=true",
+  //       );
 
-        if (!isMounted) return;
-        console.log(data);
+  //       if (!isMounted) return;
+  //       console.log(data);
 
-        setUnreadCount(data.length);
-      } catch (e) {
-        if (!isMounted) return;
-        console.log(`Error ocuured`);
-      }
-    }
+  //       setUnreadCount(data.length);
+  //     } catch (e) {
+  //       if (!isMounted) return;
+  //       console.log(`Error ocuured`);
+  //     }
+  //   }
 
-    loadUnreadNotifications();
-  }, [userId]);
+  //   loadUnreadNotifications();
+  // }, [userId]);
 
   //   useEffect(() => {
   //     if (!socket) {

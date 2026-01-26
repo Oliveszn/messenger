@@ -1,9 +1,9 @@
 import { BadRequestError, NotFoundError } from "../../lib/error.js";
 import prisma from "../../prisma.js";
 
-export async function listRepliesForThread(threadId: bigint) {
-  if (!threadId || threadId <= 0) {
-    throw new BadRequestError("Invalid thread Id", undefined);
+export async function listRepliesForThread(threadId: string) {
+  if (!threadId) {
+    throw new BadRequestError("Invalid thread Id");
   }
 
   const replies = await prisma.reply.findMany({
@@ -13,10 +13,11 @@ export async function listRepliesForThread(threadId: bigint) {
   });
 
   return replies.map((r) => ({
-    id: Number(r.id),
+    id: r.id,
     body: r.body,
     createdAt: r.createdAt,
     author: {
+      id: r.author.id,
       displayName: r.author.displayName ?? null,
       handle: r.author.handle ?? null,
     },
@@ -24,7 +25,7 @@ export async function listRepliesForThread(threadId: bigint) {
 }
 
 export async function createReply(params: {
-  threadId: bigint;
+  threadId: string;
   authorUserId: string;
   body: string;
 }) {
@@ -42,7 +43,7 @@ export async function createReply(params: {
   });
 
   return {
-    id: Number(reply.id),
+    id: reply.id,
     body: reply.body,
     createdAt: reply.createdAt,
     author: {
@@ -52,7 +53,7 @@ export async function createReply(params: {
   };
 }
 
-export async function findReplyAuthor(replyId: bigint) {
+export async function findReplyAuthor(replyId: string) {
   const reply = await prisma.reply.findUnique({
     where: { id: replyId },
     select: { authorUserId: true },
@@ -65,14 +66,14 @@ export async function findReplyAuthor(replyId: bigint) {
   return reply.authorUserId;
 }
 
-export async function deleteReplyById(replyId: bigint) {
+export async function deleteReplyById(replyId: string) {
   await prisma.reply.delete({
     where: { id: replyId },
   });
 }
 
 export async function likeThreadOnce(params: {
-  threadId: bigint;
+  threadId: string;
   userId: string;
 }) {
   const { threadId, userId } = params;
@@ -85,7 +86,7 @@ export async function likeThreadOnce(params: {
 }
 
 export async function removeThreadOnce(params: {
-  threadId: bigint;
+  threadId: string;
   userId: string;
 }) {
   const { threadId, userId } = params;
@@ -96,7 +97,7 @@ export async function removeThreadOnce(params: {
 }
 
 export async function getThreadDetailsWithCounts(params: {
-  threadId: bigint;
+  threadId: string;
   viewerUserId?: string | null;
 }) {
   const { threadId, viewerUserId } = params;
@@ -125,7 +126,7 @@ export async function getThreadDetailsWithCounts(params: {
   }
 
   return {
-    id: Number(thread.id),
+    id: thread.id,
     title: thread.title,
     body: thread.body,
     createdAt: thread.createdAt,

@@ -1,3 +1,4 @@
+import ThreadsHome from "@/components/threads/ThreadsHome";
 import Link from "next/link";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
           Sign Up
         </Link>
       </div> */}
+      <ThreadsHome />
     </div>
   );
 }

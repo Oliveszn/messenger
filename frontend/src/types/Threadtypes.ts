@@ -1,13 +1,13 @@
 export type Category = {
-  id: number;
+  id: string;
   slug: string;
   name: string;
   description: string | null;
-  sortOrder: number;
+  sortOrder: string;
 };
 
 export type ThreadSummary = {
-  id: number;
+  id: string;
   title: string;
   excerpt: string;
   createdAt: string;
@@ -16,13 +16,14 @@ export type ThreadSummary = {
     name: string;
   };
   author: {
+    id: string;
     displayName: string | null;
     handle: string | null;
   };
 };
 
 export type ThreadDetail = {
-  id: number;
+  id: string;
   title: string;
   body: string;
   createdAt: string;
@@ -32,26 +33,28 @@ export type ThreadDetail = {
     name: string;
   };
   author: {
+    id: string;
     displayName: string | null;
     handle: string | null;
   };
 
   likeCount: number;
-  replyCount: number;
+  replyCount: string;
   viewerHasLikedThisPostOrNot: boolean;
 };
 
 export type Comment = {
-  id: number;
+  id: string;
   body: string;
   createdAt: string;
   author: {
+    id: string;
     displayName: string | null;
     handle: string | null;
   };
 };
 
 export type MeResponse = {
-  id: number;
+  id: string;
   handle: string | null;
 };

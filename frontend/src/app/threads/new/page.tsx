@@ -18,11 +18,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import z from "zod";
+import { z } from "zod";
 
 const NewThreadSchema = z.object({
   title: z.string().trim().min(5, "Title is too short"),
-  body: z.string().trim().min(15, "Body is too short"),
+  body: z.string().trim().min(10, "Body is too short"),
   categorySlug: z.string().trim().min(1, "Category is required"),
 });
 
@@ -181,7 +181,7 @@ export default function CreateNewThread() {
                 {...form.register("body")}
               />
             </div>
-            <CardFooter className="flex justify-end border-t border-border px-0 pt-5">
+            <div className="flex justify-end border-t border-border px-0 pt-5">
               <Button
                 type="submit"
                 disabled={isSubmitting}
@@ -189,7 +189,7 @@ export default function CreateNewThread() {
               >
                 {isSubmitting ? "Submitting..." : "Publish Thread"}
               </Button>
-            </CardFooter>
+            </div>
           </form>
         </CardContent>
       </Card>
